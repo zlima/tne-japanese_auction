@@ -6,6 +6,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public class AuctionerAgent extends Agent {
 
                     }
 
-                    myAgent.addBehaviour(new ActionPerformer);
+                    myAgent.addBehaviour(new ActionPerformer());
 
                 }
             });
@@ -87,19 +88,60 @@ public class AuctionerAgent extends Agent {
         private MessageTemplate mt;
         private AID highestBidder = null;
         private double highestBid = 0;
+        private double roundPrice =0;
 
 
         @Override
         public void action() {
+            String conversationID = companyName+"/"+initLoc+"/"+finalLoc;
 
             switch (step) {
                 case 0:
                     //init/reset proposals
                     receivedProposals = new HashMap<>();
                     numExpectedProposals = 0;
+                    roundPrice = itemPrice;
 
+                    //annunciate new auction
+
+                    ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+
+                    for(int i = 0; i < bidderAgents.length; i++) {
+
+                        if (highestBidder == null || (highestBidder != null && bidderAgents[i].compareTo(highestBidder) != 0)) {
+                            cfp.addReceiver(bidderAgents[i]);
+
+                            numExpectedProposals++;
+                        }
+                    }
+
+                    cfp.setContent(conversationID +" || " + roundPrice);
+
+                    cfp.setConversationId(conversationID);
+                    cfp.setReplyWith("cfp" + System.currentTimeMillis());
+
+                    myAgent.send(cfp);
+
+                    // Prepare the template to deal with proposals
+                    mt = MessageTemplate.and(
+                            MessageTemplate.MatchConversationId(conversationID),
+                            MessageTemplate.MatchInReplyTo(cfp.getReplyWith())
+                    );
+
+                    step = 1;
                     break;
+
+
                 case 1:
+                    ACLMessage reply = myAgent.receive(mt);
+
+                    if(reply != null){
+                        switch (reply.getPerformative()){
+                            case ACLMessage.PROPOSE:
+                                
+                        }
+                    }
+
                     break;
             }
 
