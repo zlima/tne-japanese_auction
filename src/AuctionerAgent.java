@@ -2,6 +2,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -26,10 +27,15 @@ public class AuctionerAgent extends Agent {
     private String finalLoc;
     private Double itemPrice;
     private Double averageTicketPrive;
+    private Agent mainAgent;
+    private int roundPeriod;
+    private int roundPriceIncrement;
 
 
     @Override
     protected void setup(){
+        mainAgent = this;
+
         Object[] args = getArguments();
 
         if (args != null && args.length > 0) {
@@ -39,6 +45,8 @@ public class AuctionerAgent extends Agent {
             finalLoc = args[2].toString();
             averageTicketPrive = Double.parseDouble(args[3].toString());
             itemPrice = Double.parseDouble(args[4].toString());
+            roundPeriod = Integer.parseInt(args[5].toString())*1000;
+            roundPriceIncrement = Integer.parseInt(args[6].toString());
 
             System.out.println("This time I'm selling a ticket from " + companyName + ", from " + initLoc + " to " + finalLoc + ". Initial price is: " + itemPrice);
             System.out.println("Please make your bids!");
@@ -86,9 +94,11 @@ public class AuctionerAgent extends Agent {
         private int numExpectedProposals = 0;
 
         private MessageTemplate mt;
+        private MessageTemplate mtr;
         private AID highestBidder = null;
         private double highestBid = 0;
         private double roundPrice =0;
+        private int roundWithNoOffers =0;
 
 
         @Override
@@ -135,14 +145,68 @@ public class AuctionerAgent extends Agent {
                 case 1:
                     ACLMessage reply = myAgent.receive(mt);
 
-                    if(reply != null){
-                        switch (reply.getPerformative()){
+                    if(reply != null) {
+                        switch (reply.getPerformative()) {
                             case ACLMessage.PROPOSE:
-                                
+                                //bid received
+                                receivedProposals.put(reply.getSender(), Double.parseDouble(reply.getContent()));
+
+                                System.out.println(reply.getSender().getName() + " bids " + reply.getContent());
+                                break;
+                            case ACLMessage.REFUSE:
+                                //bidder not interested
+                                roundWithNoOffers++;
+                                break;
+                        }
+
+                        if (receivedProposals.size() == numExpectedProposals) {
+                            step = 2;
                         }
                     }
-
+                        else {
+                            block();
+                        }
                     break;
+                case 2:
+                    // parte das rondas
+                    Behaviour loop = new TickerBehaviour( mainAgent, roundPeriod)
+                    {
+                        protected void onTick() {
+                            int roundStep = 0;
+                            //contador novas rondas
+                            System.out.println("Looper:" + mainAgent.getLocalName());
+                            switch (roundStep){
+                                case 0:
+                                    ACLMessage roundIncMessage = new ACLMessage(ACLMessage.INFORM);
+                                    itemPrice+=roundPriceIncrement;
+                                    for(int i = 0; i < bidderAgents.length; i++) {
+
+                                        if (highestBidder == null || (highestBidder != null && bidderAgents[i].compareTo(highestBidder) != 0)) {
+                                            roundIncMessage.addReceiver(bidderAgents[i]);
+                                        }
+                                    }
+                                    roundIncMessage.setContent("New Item price " + "||" + itemPrice);
+                                    roundIncMessage.setConversationId("roundicrementinform");
+                                    roundIncMessage.setReplyWith("roundinform" + System.currentTimeMillis());
+                                    send(roundIncMessage);
+
+                                    // Prepare the template to deal with proposals
+                                    mtr = MessageTemplate.and(
+                                            MessageTemplate.MatchConversationId("roundincrementform"),
+                                            MessageTemplate.MatchInReplyTo(roundIncMessage.getReplyWith())
+                                    );
+
+                                    roundStep = 1;
+                                    break;
+                                case 1:
+
+                                    break;
+                            }
+                        }
+                    };
+                    mainAgent.addBehaviour( loop );
+
+                    
             }
 
         }
