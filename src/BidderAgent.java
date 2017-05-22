@@ -1,9 +1,12 @@
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -14,7 +17,7 @@ public class BidderAgent extends Agent {
 
     private String currentLoc;
     private String finalLoc;
-    private Double wallet;
+    private int wallet;
     private Double currentPrice;
     private Double averageTicketPrive;
 
@@ -23,16 +26,16 @@ public class BidderAgent extends Agent {
 
         Object[] args = getArguments();
 
-        if (args != null && args.length > 0) {
-
+        //if (args != null && args.length > 0) {
+        if(args!=null){
             setRandomWallet();
 
-            currentLoc = args[0].toString();
-            currentLoc = args[1].toString();
-            finalLoc = args[2].toString();
+            //currentLoc = args[0].toString();
+            //finalLoc = args[1].toString();
 
+            currentLoc = "cena1";
+            finalLoc = "cena2";
 
-            addBehaviour(new BidRequestsServer());
 
             // Register the auction-seller service in the yellow pages
             DFAgentDescription dfd = new DFAgentDescription();
@@ -41,6 +44,8 @@ public class BidderAgent extends Agent {
             sd.setType("auction-bidder");
             sd.setName("MultiAgentSystem-auctions");
             dfd.addServices(sd);
+
+            addBehaviour(new BidRequestsServer());
 
             try {
                 DFService.register(this, dfd);
@@ -69,19 +74,82 @@ public class BidderAgent extends Agent {
 
     private void setRandomWallet() {
         int min = 10000;
-        Double max = Double.MAX_VALUE;
+        Integer max = Integer.MAX_VALUE;
 
-        wallet = ThreadLocalRandom.current().nextDouble(min, max);
+       // wallet = ThreadLocalRandom.current().nextInt(min, max);
+        wallet = 999999999;
     }
 
 
-    private class BidRequestsServer extends Behaviour{
+    private class BidRequestsServer extends OneShotBehaviour{
 
+            private String companyName, initLoc, finalLoc;
+            private Double averageTicketPrice, currentRoundPrice;
 
         @Override
         public void action() {
 
+            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+            ACLMessage msg = myAgent.receive();
+
+            if(msg != null){
+                parseContent(msg.getContent());
+                ACLMessage reply = msg.createReply();
+
+
+                if(currentRoundPrice < wallet){//calculo para decidir se entra no leilao
+
+
+                    reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+
+                    addBehaviour(new Negotiation());
+
+                } else{
+                    reply.setPerformative(ACLMessage.REFUSE);
+                }
+
+                myAgent.send(reply);
+
+            }else {
+                block();
+            }
+
         }
+
+        private void parseContent(String content){
+            String[] split = content.split("\\|\\|");
+            if(split[0].equals("InitBid")){
+                companyName = split[1];
+                initLoc = split[2];
+                finalLoc = split[3];
+                averageTicketPrice = Double.parseDouble(split[4]);
+                currentRoundPrice = Double.parseDouble(split[5]);
+            }
+
+        }
+        
+
+   private class Negotiation extends Behaviour{
+
+        @Override
+        public void action() {
+
+            ACLMessage msg = myAgent.receive();
+            if(msg != null) {
+                parseContent(msg.getContent());
+                ACLMessage reply = msg.createReply();
+            }else{
+                block();
+            }
+
+            }
+
+            private void parseContent(String content){
+                String[] split = content.split("\\|\\|");
+                System.out.println(split[0]);
+                System.out.println(split[1]);
+
+            }
 
         @Override
         public boolean done() {

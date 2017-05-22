@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baa8d526-ee2a-40e1-9c77-02d7f07a05f8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/BidderAgent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/APDescription.txt" afterPath="$PROJECT_DIR$/APDescription.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AuctionerAgent.java" afterPath="$PROJECT_DIR$/src/AuctionerAgent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BidderAgent.java" afterPath="$PROJECT_DIR$/src/BidderAgent.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,46 +17,68 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cenasAgent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cenasAgent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AuctionerAgent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="86" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1694#2623#0" expanded="true" />
-                <element signature="e#2622#2623#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BidderAgent.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="674">
-              <caret line="74" column="5" lean-forward="false" selection-start-line="74" selection-start-column="5" selection-end-line="74" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2258#2259#0" expanded="true" />
-                <element signature="e#2294#2295#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.4392338">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="cenasAgent.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/cenasAgent.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="75">
+                  <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="BidderAgent.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="643">
+                  <caret line="129" column="8" lean-forward="false" selection-start-line="129" selection-start-column="8" selection-end-line="129" selection-end-column="8" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <marker date="1495475916000" expanded="false" signature="4273:4288" ph=" { " />
+                    <marker date="1495475916000" expanded="false" signature="4301:4311" ph=" }" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="AuctionerAgent.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="465">
+                  <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="AuctionerAgent.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-746">
+                  <caret line="114" column="45" lean-forward="false" selection-start-line="114" selection-start-column="45" selection-end-line="114" selection-end-column="45" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#2005#2925#0" expanded="true" />
+                    <element signature="e#2924#2925#0" expanded="true" />
+                    <element signature="e#3215#3216#0" expanded="true" />
+                    <element signature="e#3255#3256#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -68,6 +90,9 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>myagent</find>
+      <find>AID</find>
+      <find>mainag</find>
+      <find>mtr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -95,8 +120,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="-7" />
+    <option name="y" value="25" />
     <option name="width" value="1680" />
-    <option name="height" value="1050" />
+    <option name="height" value="978" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -114,6 +141,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -143,14 +172,11 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -573,31 +599,35 @@
       <workItem from="1493303080312" duration="9263000" />
       <workItem from="1493676115925" duration="3576000" />
       <workItem from="1494517771268" duration="1694000" />
+      <workItem from="1494603037121" duration="8324000" />
+      <workItem from="1495463755007" duration="1196000" />
+      <workItem from="1495465493694" duration="6200000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14533000" />
+    <option name="totallyTimeSpent" value="30253000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="-7" y="25" width="1680" height="978" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295711" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3770115" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33860046" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29285714" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16605617" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07692308" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969475" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -609,7 +639,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988507" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -637,14 +666,90 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1560">
+          <caret line="113" column="41" lean-forward="false" selection-start-line="113" selection-start-column="41" selection-end-line="113" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1495475916000" expanded="false" signature="4273:4288" ph=" { " />
+            <marker date="1495475916000" expanded="false" signature="4301:4311" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cenasAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="28" column="23" lean-forward="false" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1495475916000" expanded="false" signature="4273:4288" ph=" { " />
+            <marker date="1495475916000" expanded="false" signature="4301:4311" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="45" column="27" lean-forward="true" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cenasAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="86" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cenasAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2700">
           <caret line="193" column="39" lean-forward="false" selection-start-line="193" selection-start-column="39" selection-end-line="193" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1694#2623#0" expanded="true" />
-            <element signature="e#2622#2623#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -663,8 +768,6 @@
           <caret line="163" column="20" lean-forward="false" selection-start-line="163" selection-start-column="20" selection-end-line="163" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1694#2623#0" expanded="true" />
-            <element signature="e#2622#2623#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -680,24 +783,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="86" selection-end-column="9" />
+        <state relative-caret-position="465">
+          <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1694#2623#0" expanded="true" />
-            <element signature="e#2622#2623#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="674">
-          <caret line="74" column="5" lean-forward="false" selection-start-line="74" selection-start-column="5" selection-end-line="74" selection-end-column="5" />
+        <state relative-caret-position="643">
+          <caret line="129" column="8" lean-forward="false" selection-start-line="129" selection-start-column="8" selection-end-line="129" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2258#2259#0" expanded="true" />
-            <element signature="e#2294#2295#0" expanded="true" />
+            <marker date="1495475916000" expanded="false" signature="4273:4288" ph=" { " />
+            <marker date="1495475916000" expanded="false" signature="4301:4311" ph=" }" />
           </folding>
         </state>
       </provider>
