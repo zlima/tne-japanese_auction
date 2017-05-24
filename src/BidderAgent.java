@@ -85,6 +85,7 @@ public class BidderAgent extends Agent {
 
             private String companyName, initLoc, finalLoc;
             private Double averageTicketPrice, currentRoundPrice;
+            private int cenas =1;
 
         @Override
         public void action() {
@@ -101,7 +102,6 @@ public class BidderAgent extends Agent {
 
                         if(currentRoundPrice < wallet){//calculo para decidir se entra no leilao
                             reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-                            addBehaviour(new Negotiation(msg.getPerformative()));
 
                         } else{
                             reply.setPerformative(ACLMessage.REFUSE);
