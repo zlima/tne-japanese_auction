@@ -81,7 +81,7 @@ public class BidderAgent extends Agent {
     }
 
 
-    private class BidRequestsServer extends OneShotBehaviour{
+    private class BidRequestsServer extends Behaviour{
 
             private String companyName, initLoc, finalLoc;
             private Double averageTicketPrice, currentRoundPrice;
@@ -93,22 +93,26 @@ public class BidderAgent extends Agent {
             ACLMessage msg = myAgent.receive();
 
             if(msg != null){
-                parseContent(msg.getContent());
-                ACLMessage reply = msg.createReply();
 
+                switch (msg.getPerformative()){
+                    case ACLMessage.CFP:
+                        parseContent(msg.getContent());
+                        ACLMessage reply = msg.createReply();
 
-                if(currentRoundPrice < wallet){//calculo para decidir se entra no leilao
+                        if(currentRoundPrice < wallet){//calculo para decidir se entra no leilao
+                            reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+                            addBehaviour(new Negotiation(msg.getPerformative()));
 
+                        } else{
+                            reply.setPerformative(ACLMessage.REFUSE);
+                        }
 
-                    reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-
-                    addBehaviour(new Negotiation());
-
-                } else{
-                    reply.setPerformative(ACLMessage.REFUSE);
+                        myAgent.send(reply);
+                        break;
+                    case ACLMessage.INFORM:
+                        System.out.println(msg.getContent());
+                        break;
                 }
-
-                myAgent.send(reply);
 
             }else {
                 block();
@@ -127,15 +131,30 @@ public class BidderAgent extends Agent {
             }
 
         }
-        
+
+        @Override
+        public boolean done() {
+            return false;
+        }
+
+
+    }
+
 
    private class Negotiation extends Behaviour{
+        private int performative;
+
+        public Negotiation(int Performative){
+            this.performative = Performative;
+        }
 
         @Override
         public void action() {
-
+            MessageTemplate mtr = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
             ACLMessage msg = myAgent.receive();
+
             if(msg != null) {
+                System.out.println("oiiiiiii recebi");
                 parseContent(msg.getContent());
                 ACLMessage reply = msg.createReply();
             }else{

@@ -84,7 +84,7 @@ public class AuctionerAgent extends Agent {
 
                     }
 
-                   addBehaviour(new ActionPerformer());
+                   addBehaviour(new ActionPerformer(myAgent,5000));
 
                 }
             });
@@ -97,11 +97,17 @@ public class AuctionerAgent extends Agent {
         }
     }
 
-    private class loop extends TickerBehaviour{
+    private class ActionPerformer extends TickerBehaviour{
         private MessageTemplate mtr;
-        int roundStep;
+        int roundStep=0;
+        private ArrayList<AID> receivedProposals = new ArrayList<>();
+        private int numExpectedProposals = 0;
 
-        public loop(Agent a, long period) {
+        private MessageTemplate mt;
+        private double roundPrice =0;
+
+
+        public ActionPerformer(Agent a, long period) {
             super(a, period);
         }
 
@@ -109,19 +115,84 @@ public class AuctionerAgent extends Agent {
         public void onStart() {
             super.onStart();
             setFixedPeriod(true);
+
+
         }
+
 
         protected void onTick() {
             System.out.println(getTickCount());
-            /* roundStep = 0;
+            String conversationID = companyName+"||"+initLoc+"||"+finalLoc;
+
                 //contador novas rondas
 
                 switch (roundStep){
+
                     case 0:
+                        //init/reset proposals
+                        receivedProposals = new ArrayList<>();
+                        numExpectedProposals = 0;
+                        roundPrice = itemPrice;
+
+                        //annunciate new auction
+
+                        ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+
+                        for (int i = 0; i < bidderAgents.length; i++) {
+                            cfp.addReceiver(bidderAgents[i]);
+
+                        }
+
+
+                        cfp.setContent("InitBid"+"||"+conversationID +"||" + averageTicketPrive+"||"+roundPrice);
+
+                        cfp.setConversationId(conversationID);
+                        cfp.setReplyWith("cfp" + System.currentTimeMillis());
+
+                        myAgent.send(cfp);
+
+
+                        // Prepare the template to deal with proposals
+                        mt = MessageTemplate.and(
+                                MessageTemplate.MatchConversationId(conversationID),
+                                MessageTemplate.MatchInReplyTo(cfp.getReplyWith())
+                        );
+                        roundStep = 1;
+                        break;
+                    case 1:
+                        ACLMessage reply = myAgent.receive(mt);
+                            if(reply != null) {
+                                switch (reply.getPerformative()) {
+                                    case ACLMessage.ACCEPT_PROPOSAL:
+                                        //bid received
+                                        receivedProposals.add(reply.getSender());
+                                        System.out.println(reply.getSender().getName() + " Auction Bidder ");
+                                        break;
+                                    case ACLMessage.REFUSE:
+                                        //bidder not interested
+
+                                        break;
+                                }
+
+                                if (receivedProposals.size() > 0) {
+                                    roundStep = 2;
+                                }
+                            }
+                            else {
+                                block();
+                            }
+                        break;
+                    case 2:
+                        // parte das rondas
                         ACLMessage roundIncMessage = new ACLMessage(ACLMessage.INFORM);
                         itemPrice+=roundPriceIncrement;
 
-                        roundIncMessage.setContent("New Item price " + "||" + itemPrice);
+                        for (int i = 0; i < bidderAgents.length; i++) {
+                            roundIncMessage.addReceiver(bidderAgents[i]);
+
+                        }
+
+                        roundIncMessage.setContent("New Item price" + "||" + itemPrice);
                         roundIncMessage.setConversationId("roundicrementinform");
                         roundIncMessage.setReplyWith("roundinform" + System.currentTimeMillis());
                         send(roundIncMessage);
@@ -131,13 +202,11 @@ public class AuctionerAgent extends Agent {
                                 MessageTemplate.MatchConversationId("roundincrementform"),
                                 MessageTemplate.MatchInReplyTo(roundIncMessage.getReplyWith())
                         );
-                        roundStep = 1;
-                        break;
-                    case 1:
-                        System.out.println("Looper:" + mainAgent.getLocalName());
-                        ACLMessage reply = myAgent.receive(mtr);
-                        if(reply != null) {
-                            switch (reply.getPerformative()) {
+                        roundStep = 3;
+                    case 3:
+                        ACLMessage reply2 = myAgent.receive(mtr);
+                        if(reply2 != null) {
+                            switch (reply2.getPerformative()) {
                                 case ACLMessage.AGREE:
                                     break;
                                 case ACLMessage.CANCEL:
@@ -147,94 +216,12 @@ public class AuctionerAgent extends Agent {
 
                             block();
                         }
+                        roundStep = 2;
 
                         break;
-                }*/
+                }
             }
         }
 
-
-    private class ActionPerformer extends OneShotBehaviour{
-
-        private int step = 0;
-        private ArrayList<AID> receivedProposals = new ArrayList<>();
-        private int numExpectedProposals = 0;
-
-        private MessageTemplate mt;
-        private AID highestBidder = null;
-        private double highestBid = 0;
-        private double roundPrice =0;
-        private int roundWithNoOffers =0;
-
-
-        @Override
-        public void action() {
-
-            String conversationID = companyName+"||"+initLoc+"||"+finalLoc;
-
-            switch (step) {
-                case 0:
-                    //init/reset proposals
-                    receivedProposals = new ArrayList<>();
-                    numExpectedProposals = 0;
-                    roundPrice = itemPrice;
-
-                    //annunciate new auction
-
-                    ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-
-                    for (int i = 0; i < bidderAgents.length; i++) {
-                        if (highestBidder == null || (highestBidder != null && bidderAgents[i].compareTo(highestBidder) != 0)) {
-                            cfp.addReceiver(bidderAgents[i]);
-                        }
-                    }
-
-
-                    cfp.setContent("InitBid"+"||"+conversationID +"||" + averageTicketPrive+"||"+roundPrice);
-
-                    cfp.setConversationId(conversationID);
-                    cfp.setReplyWith("cfp" + System.currentTimeMillis());
-
-                    myAgent.send(cfp);
-
-
-                    // Prepare the template to deal with proposals
-                    mt = MessageTemplate.and(
-                            MessageTemplate.MatchConversationId(conversationID),
-                            MessageTemplate.MatchInReplyTo(cfp.getReplyWith())
-                    );
-                    step = 1;
-                case 1:
-                    ACLMessage reply = myAgent.receive(mt);
-                    for(int i =0; i < bidderAgents.length;i++){
-                        if(reply != null) {
-                            switch (reply.getPerformative()) {
-                                case ACLMessage.ACCEPT_PROPOSAL:
-                                    //bid received
-                                    receivedProposals.add(reply.getSender());
-                                    System.out.println(reply.getSender().getName() + " Auction Bidder ");
-                                    break;
-                                case ACLMessage.REFUSE:
-                                    //bidder not interested
-                                    roundWithNoOffers++;
-                                    break;
-                            }
-
-                            if (receivedProposals.size() > 0) {
-                                step = 2;
-                            }
-                        }
-                        else {
-                            block();
-                        }
-                    }
-                case 2:
-                    // parte das rondas
-                    addBehaviour(new loop(mainAgent,5000));
-            }
-
-        }
-
-    }
 
 }
