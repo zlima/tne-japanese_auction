@@ -31,6 +31,7 @@ public class Auctioner2Agent extends Agent {
     private int roundPriceIncrement;
     private int roundCounter=0;
     private int negotiationParticipants;
+    private Double currentItemPrice;
 
     @Override
     protected void setup() {
@@ -55,6 +56,7 @@ public class Auctioner2Agent extends Agent {
             itemPrice = 10.0;
             roundPeriod = 40000;
             roundPriceIncrement = 10;
+            currentItemPrice = itemPrice;
 
 
             System.out.println("This time I'm selling a ticket from " + companyName + ", from " + initLoc + " to " + finalLoc + ". Initial price is: " + itemPrice);
@@ -65,13 +67,15 @@ public class Auctioner2Agent extends Agent {
             sd.setType("auction-bidder");
             template.addServices(sd);
 
+
             try{
                 DFAgentDescription [] result = DFService.search(this,template);
-                negotiationParticipants = bidderAgents.size();
+                bidderAgents = new ArrayList<>();
                 for(int i=0; i< result.length;i++){
                     System.out.println("Found new bidder: " + result[i].getName());
                     bidderAgents.add(result[i].getName());
                 }
+                negotiationParticipants = bidderAgents.size();
 
             } catch (FIPAException e) {
 
@@ -106,7 +110,9 @@ public class Auctioner2Agent extends Agent {
 
                     Enumeration e = responses.elements();
                     while (e.hasMoreElements()) {
+                        ACLMessage msg = (ACLMessage) e.nextElement();
                         if(msg.getPerformative() == ACLMessage.PROPOSE){
+                            System.out.println("oiiiii");
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.CFP);
                             acceptances.addElement(reply);
@@ -118,7 +124,7 @@ public class Auctioner2Agent extends Agent {
                         }
 
                     }
-                    updateRound();
+                    updateRound(responses);
                 }
 
             });
@@ -134,11 +140,17 @@ public class Auctioner2Agent extends Agent {
     private void updateBidders(Vector responses){
 
         for (int i=bidderAgents.size()-1; i>=0; i--){
-            for (int y=responses.size();y>=0;y--){
+            for (int y=responses.size()-1;y>=0;y--){
+                int counter =1;
                 ACLMessage response = (ACLMessage)responses.get(y);
                 if( response.getSender().getName().equals(bidderAgents.get(i).getName())){
+                    break;
+                }
+                else if(counter == bidderAgents.size() ){
                     bidderAgents.remove(i);
                     negotiationParticipants--;
+                }else{
+                    counter++;
                 }
             }
         }
@@ -146,7 +158,7 @@ public class Auctioner2Agent extends Agent {
 
     private ACLMessage sendFirstCFP(){
 
-        Proposal cfp = new Proposal(companyName, initLoc, finalLoc, averageTicketPrive, itemPrice,this.getAID());
+        Proposal cfp = new Proposal(companyName, initLoc, finalLoc, averageTicketPrive,itemPrice,currentItemPrice, roundPriceIncrement,roundCounter,this.getAID());
 
        ACLMessage msg = new ACLMessage(ACLMessage.CFP);
         for (int i = 0; i < bidderAgents.size(); i++) {
@@ -156,11 +168,10 @@ public class Auctioner2Agent extends Agent {
 
         msg.setProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET);
 
-        msg.setReplyByDate(new Date(System.currentTimeMillis() + 50000));
+        msg.setReplyByDate(new Date(System.currentTimeMillis() + 5000));
 
         try {
             msg.setContentObject(cfp);
-            updateRound();
         } catch (IOException e) {
             System.out.println("error creating first CFP");
         }
@@ -168,9 +179,10 @@ public class Auctioner2Agent extends Agent {
         return msg;
     }
 
-    private void updateRound(){
+    private void updateRound(Vector responses){
+        updateBidders(responses);
         roundCounter++;
-        itemPrice += roundPriceIncrement;
+        currentItemPrice += roundPriceIncrement;
     }
 
 }

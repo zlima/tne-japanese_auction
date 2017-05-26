@@ -20,7 +20,7 @@ import java.util.Map;
 
 // ticketbehaviour
 public class AuctionerAgent extends Agent {
-
+/*
     private AID[] bidderAgents;
 
     private String companyName;
@@ -254,5 +254,5 @@ public class AuctionerAgent extends Agent {
             }
         }
 
-
+*/
 }

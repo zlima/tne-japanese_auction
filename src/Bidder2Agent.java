@@ -2,6 +2,7 @@ import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
+import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
@@ -12,6 +13,8 @@ import jade.proto.SSIteratedContractNetResponder;
 import jade.proto.SSResponderDispatcher;
 import sun.management.Agent;
 
+import java.io.IOException;
+
 /**
  * Created by joselima on 25/05/17.
  */
@@ -20,8 +23,6 @@ public class Bidder2Agent extends jade.core.Agent {
     private String currentLoc;
     private String finalLoc;
     private int wallet;
-    private Double currentPrice;
-    private Double averageTicketPrive;
     private boolean firstCFP;
     private Proposal currentProposal;
 
@@ -49,7 +50,14 @@ public class Bidder2Agent extends jade.core.Agent {
             sd.setName("MultiAgentSystem-auctions");
             dfd.addServices(sd);
 
-            System.out.println(getAID().getName() + " ready to buy some stuff. My wallet is $" + wallet);
+            try {
+                DFService.register(this,dfd);
+                System.out.println(getAID().getName() + " ready to buy some stuff. My wallet is $" + wallet);
+            } catch (FIPAException e) {
+                e.printStackTrace();
+            }
+
+
 
             MessageTemplate template = MessageTemplate.and(
                     MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET),
@@ -61,14 +69,46 @@ public class Bidder2Agent extends jade.core.Agent {
                     addBehaviour(new SSIteratedContractNetResponder(this.getAgent(), aclMessage) {
 
                         @Override
-                        protected ACLMessage handleCfp(ACLMessage cfp) {
+                        protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
 
                             if(firstCFP){
-                                handleFirstCFP(cfp);
-                            }
-                            else{
+                                try {
+                                    ACLMessage propose = handleFirstCFP(cfp);
+                                    firstCFP = false;
+                                    return propose;
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
                             }
+                            else{
+                                if(currentProposal.getCurrentItemPrice() < (wallet/2)){//fazer aqui calculo para decidir se continua
+                                    ACLMessage propose = cfp.createReply();
+                                    propose.setPerformative(ACLMessage.PROPOSE);
+
+                                    try {
+                                        System.out.println("eviar cfp");
+                                        propose.setContentObject(new String("Continuo"));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    return propose;
+                                }
+                                else{
+                                    ACLMessage refuse = cfp.createReply();
+                                    refuse.setPerformative(ACLMessage.REFUSE);
+
+                                    try {
+                                        refuse.setContentObject(new String("Quero Sair."));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return refuse;
+                                }
+
+                            }
+                            throw new RefuseException("rip");
                         }
 
                     });
@@ -84,22 +124,30 @@ public class Bidder2Agent extends jade.core.Agent {
         }
     }
 
-    private Proposal handleFirstCFP(ACLMessage cfp){
+    private ACLMessage handleFirstCFP(ACLMessage cfp) throws IOException {
+        System.out.println("Receni primeira CFP");
         parseCFP(cfp);
+        ACLMessage propose = cfp.createReply();
 
+
+
+        //verificar aqui se quer entrar no leilao ou nao
+        propose.setPerformative(ACLMessage.PROPOSE);
+        propose.setContentObject(new String("Quero Entrar"));
+
+       return propose;
     }
 
-    private void parseCFP(ACLMessage msg){
+    private Proposal parseCFP(ACLMessage msg){
         Proposal proposal = null;
 
         try{
             proposal = (Proposal) msg.getContentObject();
-            currentProposal = new Proposal(proposal.getCompanyName(),proposal.getInitLoc(),proposal.getFinalLoc(),proposal.getAverageTicketPrice(),proposal.getItemPrice(),msg.getSender());
-            firstCFP = false;
+            currentProposal = new Proposal(proposal.getCompanyName(),proposal.getInitLoc(),proposal.getFinalLoc(),proposal.getAverageTicketPrice(),proposal.getItemPrice(),proposal.getCurrentItemPrice(),proposal.getRoundIncrement(),proposal.getCurrentRound(),proposal.getSender());
         } catch (UnreadableException e) {
             e.printStackTrace();
         }
-
+        return proposal;
     }
 
     private void setRandomWallet() {

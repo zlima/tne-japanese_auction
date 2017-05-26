@@ -12,15 +12,21 @@ public class Proposal implements Serializable {
     private Double averageTicketPrice;
     private Double itemPrice;
     private AID sender;
+    private double currentItemPrice;
+    private int roundIncrement;
+    private int currentRound;
 
 
-    public Proposal(String companyName, String initLoc, String finalLoc, Double averageTicketPrice, Double itemPrice, AID sender){
+    public Proposal(String companyName, String initLoc, String finalLoc, Double averageTicketPrice, Double itemPrice,Double currentItemPrice,int roundIncrement, int currentRound ,AID sender){
     this.companyName=companyName;
     this.initLoc=initLoc;
     this.finalLoc=finalLoc;
     this.averageTicketPrice = averageTicketPrice;
     this.itemPrice=itemPrice;
     this.sender = sender;
+    this.currentItemPrice = currentItemPrice;
+    this.roundIncrement = roundIncrement;
+    this.currentRound = currentRound;
     }
 
 
@@ -46,5 +52,17 @@ public class Proposal implements Serializable {
 
     public Double getItemPrice() {
         return itemPrice;
+    }
+
+    public double getCurrentItemPrice() {
+        return currentItemPrice;
+    }
+
+    public int getRoundIncrement() {
+        return roundIncrement;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
     }
 }
