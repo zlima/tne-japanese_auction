@@ -161,7 +161,7 @@ public class AuctionerAgent extends Agent {
                         }
 
                         if (receivedProposals.size() > 0) {
-                            addBehaviour(new ActionPerformer(myAgent,5000));
+                            addBehaviour(new ActionPerformer(myAgent,5000,receivedProposals));
                             roundStep =3;
                         }
                     } else {
@@ -184,11 +184,13 @@ public class AuctionerAgent extends Agent {
     private class ActionPerformer extends TickerBehaviour{
         private MessageTemplate mtr;
         int roundStep=0;
+        private ArrayList<AID> receivedProposals = new ArrayList<>();
 
 
 
-        public ActionPerformer(Agent a, long period) {
+        public ActionPerformer(Agent a, long period, ArrayList<AID> receivedProposals) {
             super(a, period);
+            this.receivedProposals = receivedProposals;
         }
 
         @Override
@@ -212,8 +214,8 @@ public class AuctionerAgent extends Agent {
                         ACLMessage roundIncMessage = new ACLMessage(ACLMessage.INFORM);
                         itemPrice+=roundPriceIncrement;
 
-                        for (int i = 0; i < bidderAgents.length; i++) {
-                            roundIncMessage.addReceiver(bidderAgents[i]);
+                        for (int i = 0; i < receivedProposals.size(); i++) {
+                            roundIncMessage.addReceiver(receivedProposals.get(i));
 
                         }
 
@@ -229,22 +231,26 @@ public class AuctionerAgent extends Agent {
                         );
                         roundStep = 1;
                     case 1:
-                        ACLMessage reply2 = myAgent.receive(mtr);
-                        if(reply2 != null) {
-                            switch (reply2.getPerformative()) {
-                                case ACLMessage.AGREE:
-                                    break;
-                                case ACLMessage.CANCEL:
-                                    break;
-                            }
-                        }else{
-
-                            block();
-                        }
+                        test cenas;
+                       addBehaviour( cenas = new test());
+                       receivedProposals = cenas.getReplys();
                         roundStep = 0;
 
                         break;
                 }
+            }
+        }
+
+        public class test extends Behaviour{
+
+            @Override
+            public void action() {
+
+            }
+
+            @Override
+            public boolean done() {
+                return false;
             }
         }
 

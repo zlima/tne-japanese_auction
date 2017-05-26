@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/Auctioner2Agent.java" line="89" mnemonic="8" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="baa8d526-ee2a-40e1-9c77-02d7f07a05f8" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Auctioner2Agent.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Bidder2Agent.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Proposal.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/APDescription.txt" afterPath="$PROJECT_DIR$/APDescription.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AuctionerAgent.java" afterPath="$PROJECT_DIR$/src/AuctionerAgent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BidderAgent.java" afterPath="$PROJECT_DIR$/src/BidderAgent.java" />
     </list>
@@ -16,7 +24,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4392338">
+    <splitter split-orientation="horizontal" split-proportion="0.39347675">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="cenasAgent.java" pinned="false" current-in-tab="false">
@@ -29,11 +37,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="BidderAgent.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="BidderAgent.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="291">
-                  <caret line="111" column="43" lean-forward="false" selection-start-line="111" selection-start-column="43" selection-end-line="111" selection-end-column="43" />
+                <state relative-caret-position="-1545">
+                  <caret line="49" column="16" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -44,10 +52,46 @@
           <file leaf-file-name="AuctionerAgent.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="465">
+                <state relative-caret-position="623">
                   <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Auctioner2Agent.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/Auctioner2Agent.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-586">
+                  <caret line="92" column="54" lean-forward="false" selection-start-line="92" selection-start-column="54" selection-end-line="92" selection-end-column="54" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Proposal.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/Proposal.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="672">
+                  <caret line="48" column="5" lean-forward="true" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#698#699#0" expanded="true" />
+                    <element signature="e#732#733#0" expanded="true" />
+                    <element signature="e#766#767#0" expanded="true" />
+                    <element signature="e#796#797#0" expanded="true" />
+                    <element signature="e#831#832#0" expanded="true" />
+                    <element signature="e#862#863#0" expanded="true" />
+                    <element signature="e#907#908#0" expanded="true" />
+                    <element signature="e#948#949#0" expanded="true" />
+                    <element signature="e#978#979#0" expanded="true" />
+                    <element signature="e#1007#1008#0" expanded="true" />
+                    <element signature="e#1043#1044#0" expanded="true" />
+                    <element signature="e#1075#1076#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -57,15 +101,29 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="AuctionerAgent.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="AuctionerAgent.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="170">
-                  <caret line="93" column="20" lean-forward="false" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="20" />
+                <state relative-caret-position="-392">
+                  <caret line="109" column="44" lean-forward="false" selection-start-line="109" selection-start-column="12" selection-end-line="109" selection-end-column="44" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#2005#2923#0" expanded="true" />
                     <element signature="e#2922#2923#0" expanded="true" />
+                    <element signature="e#8211#8212#0" expanded="true" />
+                    <element signature="e#8255#8256#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Bidder2Agent.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/Bidder2Agent.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="345">
+                  <caret line="97" column="29" lean-forward="false" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -89,6 +147,7 @@
       <find>mainag</find>
       <find>mtr</find>
       <find>system.ou</find>
+      <find>system.o</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -104,8 +163,11 @@
       <list>
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/cenasAgent.java" />
-        <option value="$PROJECT_DIR$/src/AuctionerAgent.java" />
         <option value="$PROJECT_DIR$/src/BidderAgent.java" />
+        <option value="$PROJECT_DIR$/src/AuctionerAgent.java" />
+        <option value="$PROJECT_DIR$/src/Auctioner2Agent.java" />
+        <option value="$PROJECT_DIR$/src/Proposal.java" />
+        <option value="$PROJECT_DIR$/src/Bidder2Agent.java" />
       </list>
     </option>
   </component>
@@ -598,15 +660,15 @@
       <workItem from="1495463755007" duration="1196000" />
       <workItem from="1495465493694" duration="6538000" />
       <workItem from="1495562296690" duration="6388000" />
-      <workItem from="1495623984512" duration="515000" />
+      <workItem from="1495623984512" duration="9990000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37494000" />
+    <option name="totallyTimeSpent" value="46969000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="978" extended-state="6" />
+    <frame x="0" y="23" width="1680" height="978" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -624,7 +686,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07814408" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12026862" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969475" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -679,6 +741,10 @@
           <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -715,6 +781,10 @@
           <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -743,6 +813,10 @@
           <caret line="45" column="27" lean-forward="true" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -761,6 +835,10 @@
           <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="86" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -779,6 +857,10 @@
           <caret line="193" column="39" lean-forward="false" selection-start-line="193" selection-start-column="39" selection-end-line="193" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -797,6 +879,10 @@
           <caret line="163" column="20" lean-forward="false" selection-start-line="163" selection-start-column="20" selection-end-line="163" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -810,20 +896,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
+    <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="45" column="27" lean-forward="false" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
+        <state relative-caret-position="-1545">
+          <caret line="49" column="16" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BidderAgent.java">
+    <entry file="file://$PROJECT_DIR$/src/AuctionerAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="111" column="43" lean-forward="false" selection-start-line="111" selection-start-column="43" selection-end-line="111" selection-end-column="43" />
+        <state relative-caret-position="-392">
+          <caret line="109" column="44" lean-forward="false" selection-start-line="109" selection-start-column="12" selection-end-line="109" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2005#2923#0" expanded="true" />
+            <element signature="e#2922#2923#0" expanded="true" />
+            <element signature="e#8211#8212#0" expanded="true" />
+            <element signature="e#8255#8256#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Auctioner2Agent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-586">
+          <caret line="92" column="54" lean-forward="false" selection-start-line="92" selection-start-column="54" selection-end-line="92" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Proposal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="672">
+          <caret line="48" column="5" lean-forward="true" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#698#699#0" expanded="true" />
+            <element signature="e#732#733#0" expanded="true" />
+            <element signature="e#766#767#0" expanded="true" />
+            <element signature="e#796#797#0" expanded="true" />
+            <element signature="e#831#832#0" expanded="true" />
+            <element signature="e#862#863#0" expanded="true" />
+            <element signature="e#907#908#0" expanded="true" />
+            <element signature="e#948#949#0" expanded="true" />
+            <element signature="e#978#979#0" expanded="true" />
+            <element signature="e#1007#1008#0" expanded="true" />
+            <element signature="e#1043#1044#0" expanded="true" />
+            <element signature="e#1075#1076#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bidder2Agent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="97" column="29" lean-forward="false" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

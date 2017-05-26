@@ -92,13 +92,14 @@ public class BidderAgent extends Agent {
 
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
             ACLMessage msg = myAgent.receive();
+            ACLMessage reply;
 
             if(msg != null){
 
                 switch (msg.getPerformative()){
                     case ACLMessage.CFP:
                         parseContent(msg.getContent());
-                        ACLMessage reply = msg.createReply();
+                        reply = msg.createReply();
 
                         if(currentRoundPrice < wallet){//calculo para decidir se entra no leilao
                             reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
@@ -111,6 +112,9 @@ public class BidderAgent extends Agent {
                         break;
                     case ACLMessage.INFORM:
                         System.out.println(msg.getContent());
+                        reply = msg.createReply();
+                        reply.setPerformative(ACLMessage.CANCEL);
+                        myAgent.send(reply);
                         break;
                 }
 
