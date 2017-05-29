@@ -6,6 +6,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
 import java.io.IOException;
@@ -87,6 +88,14 @@ public class Auctioner2Agent extends Agent {
                 @Override
                 protected void handlePropose(ACLMessage propose, Vector v) {
 
+                    try {
+                        String cenas = (String) propose.getContentObject();
+                        System.out.println(cenas);
+                    } catch (UnreadableException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
 
                 @Override
@@ -105,6 +114,7 @@ public class Auctioner2Agent extends Agent {
 
                     if (responses.size() < negotiationParticipants) {
                         //handle timeout
+                        System.out.println("timeout");
                       updateBidders(responses);
                     }
 
@@ -112,7 +122,6 @@ public class Auctioner2Agent extends Agent {
                     while (e.hasMoreElements()) {
                         ACLMessage msg = (ACLMessage) e.nextElement();
                         if(msg.getPerformative() == ACLMessage.PROPOSE){
-                            System.out.println("oiiiii");
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.CFP);
                             acceptances.addElement(reply);
@@ -124,7 +133,10 @@ public class Auctioner2Agent extends Agent {
                         }
 
                     }
+
+                    doWait(3000);
                     updateRound(responses);
+                    newIteration(acceptances);
                 }
 
             });
@@ -168,7 +180,7 @@ public class Auctioner2Agent extends Agent {
 
         msg.setProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET);
 
-        msg.setReplyByDate(new Date(System.currentTimeMillis() + 5000));
+        msg.setReplyByDate(new Date(System.currentTimeMillis() + 3000));
 
         try {
             msg.setContentObject(cfp);

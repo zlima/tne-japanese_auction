@@ -87,7 +87,6 @@ public class Bidder2Agent extends jade.core.Agent {
                                     propose.setPerformative(ACLMessage.PROPOSE);
 
                                     try {
-                                        System.out.println("eviar cfp");
                                         propose.setContentObject(new String("Continuo"));
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -125,7 +124,6 @@ public class Bidder2Agent extends jade.core.Agent {
     }
 
     private ACLMessage handleFirstCFP(ACLMessage cfp) throws IOException {
-        System.out.println("Receni primeira CFP");
         parseCFP(cfp);
         ACLMessage propose = cfp.createReply();
 
