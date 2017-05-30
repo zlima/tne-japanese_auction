@@ -27,12 +27,12 @@ public class Auctioner2Agent extends Agent {
     private String finalLoc;
     private Double itemPrice;
     private Double averageTicketPrive;
-    private Agent mainAgent;
     private int roundPeriod;
     private int roundPriceIncrement;
     private int roundCounter=0;
     private int negotiationParticipants;
     private Double currentItemPrice;
+    private boolean lastRound = false;
 
     @Override
     protected void setup() {
@@ -69,6 +69,7 @@ public class Auctioner2Agent extends Agent {
             template.addServices(sd);
 
 
+
             try{
                 DFAgentDescription [] result = DFService.search(this,template);
                 bidderAgents = new ArrayList<>();
@@ -100,13 +101,7 @@ public class Auctioner2Agent extends Agent {
 
                 @Override
                 protected void handleRefuse(ACLMessage refuse) {
-                    for(int i=bidderAgents.size()-1;i>=0;i--){
-                        if(bidderAgents.get(i).getName().equals(refuse.getSender().getName())){
-                            bidderAgents.remove(i);
-                            negotiationParticipants--;
-                        }
-                    }
-
+                   removeBidder(refuse);
                 }
 
                 @Override
@@ -123,13 +118,25 @@ public class Auctioner2Agent extends Agent {
                         ACLMessage msg = (ACLMessage) e.nextElement();
                         if(msg.getPerformative() == ACLMessage.PROPOSE){
                             ACLMessage reply = msg.createReply();
-                            reply.setPerformative(ACLMessage.CFP);
-                            acceptances.addElement(reply);
+                            if(lastRound){
+                                reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+                                acceptances.addElement(reply);
+                            }
+                            else{
+                                reply.setPerformative(ACLMessage.CFP);
+                                acceptances.addElement(reply);
+                            }
 
                         }
 
                         if (msg.getPerformative() == ACLMessage.REFUSE) {
+                            removeBidder(msg);
                             responses.remove(msg);
+                        }
+
+                        if(msg.getPerformative() == ACLMessage.INFORM){
+                            System.out.println("Vencedor do Leilão é: "+bidderAgents.get(0).getName()+ " e terá que pagar: "+currentItemPrice);
+                            doDelete();
                         }
 
                     }
@@ -146,6 +153,15 @@ public class Auctioner2Agent extends Agent {
             System.out.println("rip nos args");
             //terminate agent
             doDelete();
+        }
+    }
+
+    private void removeBidder(ACLMessage refuse){
+        for(int i=bidderAgents.size()-1;i>=0;i--){
+            if(bidderAgents.get(i).getName().equals(refuse.getSender().getName())){
+                bidderAgents.remove(i);
+                negotiationParticipants--;
+            }
         }
     }
 
@@ -191,10 +207,27 @@ public class Auctioner2Agent extends Agent {
         return msg;
     }
 
-    private void updateRound(Vector responses){
-        updateBidders(responses);
-        roundCounter++;
-        currentItemPrice += roundPriceIncrement;
+    private boolean checkLastRound(){
+
+        if(negotiationParticipants == 1){
+
+            return true;
+        }
+
+        else return false;
     }
+
+    private void updateRound(Vector responses) {
+        updateBidders(responses);
+        if(!checkLastRound()){
+            roundCounter++;
+            currentItemPrice += roundPriceIncrement;
+        }else{
+            //acabar aqui o cenas
+            lastRound = true;
+        }
+
+    }
+
 
 }

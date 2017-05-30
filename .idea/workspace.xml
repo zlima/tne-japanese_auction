@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/Auctioner2Agent.java" line="102" mnemonic="8" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="baa8d526-ee2a-40e1-9c77-02d7f07a05f8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/APDescription.txt" afterPath="$PROJECT_DIR$/APDescription.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Auctioner2Agent.java" afterPath="$PROJECT_DIR$/src/Auctioner2Agent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Bidder2Agent.java" afterPath="$PROJECT_DIR$/src/Bidder2Agent.java" />
     </list>
@@ -63,10 +62,12 @@
           <file leaf-file-name="Auctioner2Agent.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Auctioner2Agent.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="135">
-                  <caret line="116" column="22" lean-forward="false" selection-start-line="116" selection-start-column="22" selection-end-line="116" selection-end-column="22" />
+                <state relative-caret-position="547">
+                  <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                    <element signature="e#3400#3401#0" expanded="true" />
+                    <element signature="e#3459#3460#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -136,8 +137,8 @@
           <file leaf-file-name="Bidder2Agent.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Bidder2Agent.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="247">
-                  <caret line="125" column="74" lean-forward="false" selection-start-line="125" selection-start-column="74" selection-end-line="125" selection-end-column="74" />
+                <state relative-caret-position="413">
+                  <caret line="161" column="4" lean-forward="false" selection-start-line="161" selection-start-column="4" selection-end-line="161" selection-end-column="4" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -255,6 +256,9 @@
     <property name="aspect.path.notification.shown" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -679,12 +683,12 @@
       <workItem from="1495463755007" duration="1196000" />
       <workItem from="1495465493694" duration="6538000" />
       <workItem from="1495562296690" duration="6388000" />
-      <workItem from="1495623984512" duration="16811000" />
+      <workItem from="1495623984512" duration="22017000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53790000" />
+    <option name="totallyTimeSpent" value="58996000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="978" extended-state="0" />
@@ -1046,18 +1050,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Auctioner2Agent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="116" column="22" lean-forward="false" selection-start-line="116" selection-start-column="22" selection-end-line="116" selection-end-column="22" />
+        <state relative-caret-position="547">
+          <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3400#3401#0" expanded="true" />
+            <element signature="e#3459#3460#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Bidder2Agent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="125" column="74" lean-forward="false" selection-start-line="125" selection-start-column="74" selection-end-line="125" selection-end-column="74" />
+        <state relative-caret-position="413">
+          <caret line="161" column="4" lean-forward="false" selection-start-line="161" selection-start-column="4" selection-end-line="161" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
