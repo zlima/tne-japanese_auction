@@ -11,7 +11,7 @@ import jade.wrapper.StaleProxyException;
  */
 public class main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
 
         Runtime rt = Runtime.instance();
 
@@ -20,14 +20,15 @@ public class main {
 
         // Create a default profile
         Profile profile = new ProfileImpl(null, 1300, null);
+        profile.setParameter("gui", "ture");
 
         AgentContainer mainContainer = rt.createMainContainer(profile);
-
         // now set the default Profile to start a container
         ProfileImpl pContainer = new ProfileImpl(null, 1200, null);
 
 
         AgentContainer cont = rt.createAgentContainer(pContainer);
+
 
         try {
             Object[] arguments = new Object[3];
@@ -40,17 +41,20 @@ public class main {
             AgentController ag2 = mainContainer.createNewAgent("Buyer2",
                     "Bidder2Agent",
                     arguments);//arguments
-            AgentController ag3 = mainContainer.createNewAgent("Buyer3",
+            AgentController ag3 = mainContainer.createNewAgent("Buyer3 ",
                     "Bidder2Agent",
                     arguments);//arguments
             AgentController ag1 = mainContainer.createNewAgent("Auc1",
                     "Auctioner2Agent",
                     new Object[] {});//arguments
+            AgentController rma = mainContainer.createNewAgent("rma", "jade.tools.rma.rma" , new Object[] {});
 
+            rma.start();
+            Thread.sleep(1000);
             ag.start();
             ag2.start();
             ag3.start();
-
+            Thread.sleep(1000);
             ag1.start();
 
         } catch (StaleProxyException e) {
