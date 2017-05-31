@@ -16,11 +16,9 @@ import java.util.*;
 /**
  * Created by joselima on 25/05/17.
  */
-<<<<<<< HEAD
 public class AuctionerAgent extends Agent {
-=======
-public class Auctioner2Agent extends Agent {
->>>>>>> master
+
+
 
     private ArrayList<AID> bidderAgents;
     private ArrayList<AID> lastBidders;
