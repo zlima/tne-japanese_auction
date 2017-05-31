@@ -23,6 +23,8 @@ public class Bidder2Agent extends jade.core.Agent {
     private int wallet;
     private boolean firstCFP;
     private Proposal currentProposal;
+    private Double necessity;
+    private Double maxValue;
 
     @Override
     protected void setup(){
@@ -35,9 +37,11 @@ public class Bidder2Agent extends jade.core.Agent {
 
             //currentLoc = args[0].toString();
             //finalLoc = args[1].toString();
+            necessity = Double.parseDouble(args[2].toString());
 
             currentLoc = "cena1";
-            finalLoc = "cena2";
+            finalLoc = "cenas2";
+
 
 
             // Register the auction-seller service in the yellow pages
@@ -113,7 +117,7 @@ public class Bidder2Agent extends jade.core.Agent {
 
                                     try {
                                         refuse.setContentObject(new String("Quero Sair."));
-                                        System.out.println("sair nao te curto");
+                                        System.out.println("Bidder: Quero Sair do Leilao: " + getLocalName()+".");
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -144,12 +148,25 @@ private boolean acceptProposal(Proposal proposal){
     boolean response = false;
 
         if(checkFlightDestination(proposal)){
+            if(maxValue >= proposal.getCurrentItemPrice() && maxValue <= wallet){
+                response = true;
+            }
+            else
+                response = false;
 
         }else{
             response = false;
         }
 
         return response;
+}
+
+private Double calcMax(Proposal proposal){
+
+    double random = ThreadLocalRandom.current().nextDouble(0.1, 1.0);
+
+    return proposal.getAverageTicketPrice()*random + proposal.getAverageTicketPrice()*necessity;
+
 }
 
 private boolean checkFlightDestination(Proposal proposal){
@@ -159,12 +176,14 @@ private boolean checkFlightDestination(Proposal proposal){
         response = true;
     }else
         response=false;
-    
+
     return response;
 }
 
     private ACLMessage handleFirstCFP(ACLMessage cfp) throws IOException {
         parseCFP(cfp);
+        maxValue = calcMax(currentProposal);
+       
         ACLMessage propose = cfp.createReply();
         if(acceptProposal(currentProposal)){
 
