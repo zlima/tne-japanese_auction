@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * Created by joselima on 25/05/17.
  */
-public class Auctioner2Agent extends Agent {
+public class AuctionerAgent extends Agent {
 
     private ArrayList<AID> bidderAgents;
     private ArrayList<AID> lastBidders;

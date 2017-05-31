@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by joselima on 25/05/17.
  */
-public class Bidder2Agent extends jade.core.Agent {
+public class BidderAgent extends jade.core.Agent {
 
     private String currentLoc;
     private String finalLoc;
