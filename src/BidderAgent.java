@@ -1,30 +1,35 @@
-import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+import jade.proto.SSIteratedContractNetResponder;
+import jade.proto.SSResponderDispatcher;
+import sun.management.Agent;
 
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by joselima on 11/05/17.
+ * Created by joselima on 25/05/17.
  */
-public class BidderAgent extends Agent {
+public class Bidder2Agent extends jade.core.Agent {
 
     private String currentLoc;
     private String finalLoc;
     private int wallet;
-    private Double currentPrice;
-    private Double averageTicketPrive;
+    private boolean firstCFP;
+    private Proposal currentProposal;
+    private Double necessity;
+    private Double maxValue;
 
     @Override
-    protected void setup() {
-
+    protected void setup(){
         Object[] args = getArguments();
+        firstCFP = true;
 
         //if (args != null && args.length > 0) {
         if(args!=null){
@@ -32,9 +37,11 @@ public class BidderAgent extends Agent {
 
             //currentLoc = args[0].toString();
             //finalLoc = args[1].toString();
+            necessity = Double.parseDouble(args[2].toString());
 
             currentLoc = "cena1";
-            finalLoc = "cena2";
+            finalLoc = "cenas2";
+
 
 
             // Register the auction-seller service in the yellow pages
@@ -45,14 +52,88 @@ public class BidderAgent extends Agent {
             sd.setName("MultiAgentSystem-auctions");
             dfd.addServices(sd);
 
-            addBehaviour(new BidRequestsServer());
-
             try {
-                DFService.register(this, dfd);
+                DFService.register(this,dfd);
+                System.out.println(getAID().getName() + " ready to buy some stuff. My wallet is $" + wallet);
             } catch (FIPAException e) {
                 e.printStackTrace();
             }
-            System.out.println(getAID().getName() + " ready to buy some stuff. My wallet is $" + wallet);
+
+
+
+            MessageTemplate template = MessageTemplate.and(
+                    MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET),
+                    MessageTemplate.MatchPerformative(ACLMessage.CFP));
+
+            addBehaviour(new SSResponderDispatcher(this, template) {
+                @Override
+                protected Behaviour createResponder(ACLMessage aclMessage) {
+                    addBehaviour(new SSIteratedContractNetResponder(this.getAgent(), aclMessage) {
+
+                        @Override
+                        protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
+                            ACLMessage inform = accept.createReply();
+                            inform.setPerformative(ACLMessage.INFORM);
+                            try {
+                                inform.setContentObject(new String("sou o champ confirmo"));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            return inform;
+                        }
+
+
+                        @Override
+                        protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
+
+                            if(firstCFP){
+                                try {
+                                    ACLMessage propose = handleFirstCFP(cfp);
+                                    firstCFP = false;
+                                    return propose;
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            else{
+                                parseCFP(cfp);
+                                if(acceptProposal(currentProposal)){//fazer aqui calculo para decidir se continua
+                                    ACLMessage propose = cfp.createReply();
+                                    propose.setPerformative(ACLMessage.PROPOSE);
+
+                                    try {
+                                        propose.setContentObject(new String("Continuo"));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    return propose;
+                                }
+                                else{
+                                    ACLMessage refuse = cfp.createReply();
+                                    refuse.setPerformative(ACLMessage.REFUSE);
+
+                                    try {
+                                        refuse.setContentObject(new String("Quero Sair."));
+                                        System.out.println("Bidder: Quero Sair do Leilao: " + getLocalName()+".");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return refuse;
+                                }
+
+
+                            }
+                            throw new RefuseException("rip");
+                        }
+
+                    });
+
+                    return null;
+                }
+                });
 
         } else {
             System.out.println("rip nos args");
@@ -60,127 +141,82 @@ public class BidderAgent extends Agent {
             doDelete();
         }
     }
-    @Override
-    protected void takeDown() {
-        try {
-            DFService.deregister(this);
-        } catch (FIPAException e) {
+
+//funcao para calcular se aceita ou nao continuar no leilao
+private boolean acceptProposal(Proposal proposal){
+
+    boolean response = false;
+
+        if(checkFlightDestination(proposal)){
+            if(maxValue >= proposal.getCurrentItemPrice() && maxValue <= wallet){
+                response = true;
+            }
+            else
+                response = false;
+
+        }else{
+            response = false;
+        }
+
+        return response;
+}
+
+private Double calcMax(Proposal proposal){
+
+    double random = ThreadLocalRandom.current().nextDouble(0.1, 1.0);
+
+    return proposal.getAverageTicketPrice()*random + proposal.getAverageTicketPrice()*necessity;
+
+}
+
+private boolean checkFlightDestination(Proposal proposal){
+    boolean response;
+
+    if(proposal.getInitLoc().equals(currentLoc) && proposal.getFinalLoc().equals(finalLoc)){
+        response = true;
+    }else
+        response=false;
+
+    return response;
+}
+
+    private ACLMessage handleFirstCFP(ACLMessage cfp) throws IOException {
+        parseCFP(cfp);
+        maxValue = calcMax(currentProposal);
+       
+        ACLMessage propose = cfp.createReply();
+        if(acceptProposal(currentProposal)){
+
+            //verificar aqui se quer entrar no leilao ou nao
+            propose.setPerformative(ACLMessage.PROPOSE);
+            propose.setContentObject(new String("Quero Entrar"));
+        }else{
+
+            propose.setPerformative(ACLMessage.REFUSE);
+            propose.setContentObject(new String("Nao quero entrar neste leilao"));
+        }
+
+
+       return propose;
+    }
+
+    private Proposal parseCFP(ACLMessage msg){
+        Proposal proposal = null;
+
+        try{
+            proposal = (Proposal) msg.getContentObject();
+            currentProposal = new Proposal(proposal.getCompanyName(),proposal.getInitLoc(),proposal.getFinalLoc(),proposal.getAverageTicketPrice(),proposal.getItemPrice(),proposal.getCurrentItemPrice(),proposal.getRoundIncrement(),proposal.getCurrentRound(),proposal.getSender());
+        } catch (UnreadableException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Bidder " + getAID().getName() + " terminating");
+        return proposal;
     }
-
 
     private void setRandomWallet() {
-        int min = 10000;
-        Integer max = Integer.MAX_VALUE;
+        Integer min = 200;
+        Integer max = 5000;
 
-       // wallet = ThreadLocalRandom.current().nextInt(min, max);
-        wallet = 999999999;
-    }
-
-
-    private class BidRequestsServer extends Behaviour{
-
-            private String companyName, initLoc, finalLoc;
-            private Double averageTicketPrice, currentRoundPrice;
-            private int cenas =1;
-
-        @Override
-        public void action() {
-
-            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-            ACLMessage msg = myAgent.receive();
-            ACLMessage reply;
-
-            if(msg != null){
-
-                switch (msg.getPerformative()){
-                    case ACLMessage.CFP:
-                        parseContent(msg.getContent());
-                        reply = msg.createReply();
-
-                        if(currentRoundPrice < wallet){//calculo para decidir se entra no leilao
-                            reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-
-                        } else{
-                            reply.setPerformative(ACLMessage.REFUSE);
-                        }
-
-                        myAgent.send(reply);
-                        break;
-                    case ACLMessage.INFORM:
-                        System.out.println(msg.getContent());
-                        reply = msg.createReply();
-                        reply.setPerformative(ACLMessage.CANCEL);
-                        myAgent.send(reply);
-                        break;
-                }
-
-            }else {
-                block();
-            }
-
-        }
-
-        private void parseContent(String content){
-            String[] split = content.split("\\|\\|");
-            if(split[0].equals("InitBid")){
-                companyName = split[1];
-                initLoc = split[2];
-                finalLoc = split[3];
-                averageTicketPrice = Double.parseDouble(split[4]);
-                currentRoundPrice = Double.parseDouble(split[5]);
-            }
-
-        }
-
-        @Override
-        public boolean done() {
-            return false;
-        }
-
+         wallet = ThreadLocalRandom.current().nextInt(min, max);
 
     }
-
-
-   private class Negotiation extends Behaviour{
-        private int performative;
-
-        public Negotiation(int Performative){
-            this.performative = Performative;
-        }
-
-        @Override
-        public void action() {
-            MessageTemplate mtr = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-            ACLMessage msg = myAgent.receive();
-
-            if(msg != null) {
-                System.out.println("oiiiiiii recebi");
-                parseContent(msg.getContent());
-                ACLMessage reply = msg.createReply();
-            }else{
-                block();
-            }
-
-            }
-
-            private void parseContent(String content){
-                String[] split = content.split("\\|\\|");
-                System.out.println(split[0]);
-                System.out.println(split[1]);
-
-            }
-
-        @Override
-        public boolean done() {
-            return false;
-        }
-    }
-
-    }
-
-
-
+}

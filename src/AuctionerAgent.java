@@ -1,46 +1,47 @@
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+import jade.proto.ContractNetInitiator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
- * Created by joselima on 27/04/17.
+ * Created by joselima on 25/05/17.
  */
+public class Auctioner2Agent extends Agent {
 
-// ticketbehaviour
-public class AuctionerAgent extends Agent {
-/*
-    private AID[] bidderAgents;
+    private ArrayList<AID> bidderAgents;
+    private ArrayList<AID> lastBidders;
 
     private String companyName;
     private String initLoc;
     private String finalLoc;
     private Double itemPrice;
     private Double averageTicketPrive;
-    private Agent mainAgent;
     private int roundPeriod;
     private int roundPriceIncrement;
-
+    private int roundCounter=0;
+    private int negotiationParticipants;
+    private Double currentItemPrice;
+    private boolean lastRound = false;
+    private boolean randomWinner = false;
 
     @Override
-    protected void setup(){
-        mainAgent = this;
+    protected void setup() {
+
 
         Object[] args = getArguments();
 
         //if (args != null && args.length > 0) {
-        if(args != null){
+        if (args != null) {
             //companyName = args[0].toString();
             //initLoc = args[1].toString();
             //finalLoc = args[2].toString();
@@ -56,37 +57,114 @@ public class AuctionerAgent extends Agent {
             itemPrice = 10.0;
             roundPeriod = 40000;
             roundPriceIncrement = 10;
+            currentItemPrice = itemPrice;
 
 
             System.out.println("This time I'm selling a ticket from " + companyName + ", from " + initLoc + " to " + finalLoc + ". Initial price is: " + itemPrice);
             System.out.println("Please make your bids!");
 
+            DFAgentDescription template = new DFAgentDescription();
+            ServiceDescription sd = new ServiceDescription();
+            sd.setType("auction-bidder");
+            template.addServices(sd);
 
-            addBehaviour(new OneShotBehaviour() {
+
+
+            try{
+                DFAgentDescription [] result = DFService.search(this,template);
+                bidderAgents = new ArrayList<>();
+                for(int i=0; i< result.length;i++){
+                    System.out.println("Found new bidder: " + result[i].getName());
+                    bidderAgents.add(result[i].getName());
+                }
+                negotiationParticipants = bidderAgents.size();
+
+            } catch (FIPAException e) {
+
+            }
+
+            ACLMessage msg = sendFirstCFP();
+
+            addBehaviour(new ContractNetInitiator(this, msg) {
                 @Override
-                public void action() {
-                    DFAgentDescription template = new DFAgentDescription();
-                    ServiceDescription sd = new ServiceDescription();
-                    sd.setType("auction-bidder");
-                    template.addServices(sd);
+                protected void handlePropose(ACLMessage propose, Vector v) {
 
-                    try{
-                        DFAgentDescription [] result = DFService.search(myAgent,template);
+                }
 
-                        bidderAgents = new AID[result.length];
-                        for(int i=0; i< result.length;i++){
-                            System.out.println("Found new bidder: " + result[i].getName());
-                            bidderAgents[i] = result[i].getName();
+                @Override
+                protected void handleRefuse(ACLMessage refuse) {
+                   //removeBidder(refuse);
+                }
+
+
+                @Override
+                protected void handleAllResponses(Vector responses, Vector acceptances){
+                    Vector msgToDelete = new Vector();
+                    if (responses.size() < negotiationParticipants) {
+                        //handle timeout
+                        System.out.println("timeout");
+                      updateBidders(responses);
+                    }
+
+                    Enumeration e = responses.elements();
+                    while (e.hasMoreElements()) {
+                        ACLMessage msg = (ACLMessage) e.nextElement();
+                        if(msg.getPerformative() == ACLMessage.PROPOSE){
+                            ACLMessage reply = msg.createReply();
+                            if(randomWinner){
+                                Iterator cenas = reply.getAllReceiver();
+                                reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+                                int winner = generateRandomWinner();
+                                while(cenas.hasNext()){
+                                    AID agent =(AID)cenas.next();
+                                    //voltar aqui
+                                    if(agent == lastBidders.get(winner)){
+                                        acceptances.addElement(reply);
+                                        newIteration(acceptances);
+                                        return;
+                                    }
+                                }
+
+                            }
+                            else if(lastRound){
+                                reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+                                acceptances.addElement(reply);
+                                newIteration(acceptances);
+                                return;
+                            }
+                            else{
+                                reply.setPerformative(ACLMessage.CFP);
+                                Proposal cfp = new Proposal(companyName, initLoc, finalLoc, averageTicketPrive,itemPrice,currentItemPrice, roundPriceIncrement,roundCounter,getAID());
+                                try {
+                                    reply.setContentObject(cfp);
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                acceptances.addElement(reply);
+                            }
 
                         }
 
-                    } catch (FIPAException e) {
+                       else if (msg.getPerformative() == ACLMessage.REFUSE) {
+                            System.out.println("Auctioner: " + msg.getSender().getLocalName() +" Abandonou o Leilao.");
+                            msgToDelete.addElement(msg);
+                        }
+
+                        else if(msg.getPerformative() == ACLMessage.INFORM){
+                            System.out.println("Vencedor do Leilão é: "+bidderAgents.get(0).getLocalName()+ " e terá que pagar: "+currentItemPrice);
+                            doDelete();
+                        }
 
                     }
 
-                   addBehaviour(new InitBehaviour());
-
+                    doWait(3000);
+                    for(int i=0;i<msgToDelete.size();i++){
+                        responses.remove(msgToDelete.get(i));
+                    }
+                    updateRound(responses);
+                    newIteration(acceptances);
                 }
+
             });
 
 
@@ -97,162 +175,91 @@ public class AuctionerAgent extends Agent {
         }
     }
 
-    private class InitBehaviour extends Behaviour{
-        int roundStep = 0;
-        private ArrayList<AID> receivedProposals = new ArrayList<>();
-        private int numExpectedProposals;
+    private int generateRandomWinner(){
 
-        private MessageTemplate mt;
-        private double roundPrice =0;
+        Random rand = new Random();
 
-        @Override
-        public void action() {
-            String conversationID = companyName+"||"+initLoc+"||"+finalLoc;
+        return rand.nextInt(((lastBidders.size()-1)) - 0) + 0;
+    }
 
+    private void updateBidders(Vector responses){
 
-            //contador novas rondas
+        bidderAgents = new ArrayList<>();
+        ACLMessage aux;
+        for(int i=0; i< responses.size();i++){
+            aux = (ACLMessage)responses.get(i);
+            bidderAgents.add(aux.getSender());
+        }
+        negotiationParticipants = bidderAgents.size();
+    }
 
-            switch (roundStep) {
+    private ACLMessage sendFirstCFP(){
 
-                case 0:
-                    //init/reset proposals
-                    receivedProposals = new ArrayList<>();
-                    numExpectedProposals = 0;
-                    roundPrice = itemPrice;
+        Proposal cfp = new Proposal(companyName, initLoc, finalLoc, averageTicketPrive,itemPrice,currentItemPrice, roundPriceIncrement,roundCounter,this.getAID());
 
-                    //annunciate new auction
-
-                    ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-
-                    for (int i = 0; i < bidderAgents.length; i++) {
-                        cfp.addReceiver(bidderAgents[i]);
-
-                    }
-
-
-                    cfp.setContent("InitBid" + "||" + conversationID + "||" + averageTicketPrive + "||" + roundPrice);
-
-                    cfp.setConversationId(conversationID);
-                    cfp.setReplyWith("cfp" + System.currentTimeMillis());
-
-                    myAgent.send(cfp);
-
-
-                    // Prepare the template to deal with proposals
-                    mt = MessageTemplate.and(
-                            MessageTemplate.MatchConversationId(conversationID),
-                            MessageTemplate.MatchInReplyTo(cfp.getReplyWith())
-                    );
-                    roundStep = 1;
-                    break;
-                case 1:
-                    ACLMessage reply = myAgent.receive(mt);
-                    if (reply != null) {
-                        switch (reply.getPerformative()) {
-                            case ACLMessage.ACCEPT_PROPOSAL:
-                                //bid received
-                                receivedProposals.add(reply.getSender());
-                                System.out.println(reply.getSender().getName() + " Auction Bidder ");
-                                break;
-                            case ACLMessage.REFUSE:
-                                //bidder not interested
-
-                                break;
-                        }
-
-                        if (receivedProposals.size() > 0) {
-                            addBehaviour(new ActionPerformer(myAgent,5000,receivedProposals));
-                            roundStep =3;
-                        }
-                    } else {
-                        block();
-                    }
-                    break;
-                case 3:
-                    break;
-            }
+       ACLMessage msg = new ACLMessage(ACLMessage.CFP);
+        for (int i = 0; i < bidderAgents.size(); i++) {
+            msg.addReceiver(bidderAgents.get(i));
 
         }
 
-        @Override
-        public boolean done() {
-            if (roundStep == 3) return true;
-            else return false;
+        msg.setProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET);
+
+        msg.setReplyByDate(new Date(System.currentTimeMillis() + 5000));
+
+        try {
+            msg.setContentObject(cfp);
+        } catch (IOException e) {
+            System.out.println("error creating first CFP");
+        }
+
+        return msg;
+    }
+
+    private boolean checkLastRound(){
+
+        if(negotiationParticipants == 1){
+            return true;
+        } else if(negotiationParticipants == 0){
+            System.out.println("Auctioner: Last "+lastBidders.size()+" bidders quit at same time.. Random will decide the winner.");
+            randomWinner = true;
+            return true;
+        } else {
+            updateLastBidders();
+            return false;
         }
     }
 
-    private class ActionPerformer extends TickerBehaviour{
-        private MessageTemplate mtr;
-        int roundStep=0;
-        private ArrayList<AID> receivedProposals = new ArrayList<>();
-
-
-
-        public ActionPerformer(Agent a, long period, ArrayList<AID> receivedProposals) {
-            super(a, period);
-            this.receivedProposals = receivedProposals;
+    private void updateLastBidders(){
+        lastBidders = new ArrayList<>();
+        for(int i=0;i<bidderAgents.size();i++){
+            lastBidders.add(bidderAgents.get(i));
         }
+    }
 
-        @Override
-        public void onStart() {
-            super.onStart();
-            setFixedPeriod(true);
+    private void updateRound(Vector responses) {
+        updateBidders(responses);
+        if(!checkLastRound()){
+            roundCounter++;
+            currentItemPrice += roundPriceIncrement;
 
+            StringBuilder cenas = new StringBuilder("Auctioner: Next Round... Round: "+roundCounter+" Item Price: "+currentItemPrice+". Participants: ");
 
-        }
-
-
-        protected void onTick() {
-            System.out.println(getTickCount());
-            String conversationID = companyName+"||"+initLoc+"||"+finalLoc;
-
-                //contador novas rondas
-
-                switch (roundStep){
-                    case 0:
-                        // parte das rondas
-                        ACLMessage roundIncMessage = new ACLMessage(ACLMessage.INFORM);
-                        itemPrice+=roundPriceIncrement;
-
-                        for (int i = 0; i < receivedProposals.size(); i++) {
-                            roundIncMessage.addReceiver(receivedProposals.get(i));
-
-                        }
-
-                        roundIncMessage.setContent("New Item price" + "||" + itemPrice);
-                        roundIncMessage.setConversationId("roundicrementinform");
-                        roundIncMessage.setReplyWith("roundinform" + System.currentTimeMillis());
-                        send(roundIncMessage);
-
-                        // Prepare the template to deal with proposals
-                        mtr = MessageTemplate.and(
-                                MessageTemplate.MatchConversationId("roundincrementform"),
-                                MessageTemplate.MatchInReplyTo(roundIncMessage.getReplyWith())
-                        );
-                        roundStep = 1;
-                    case 1:
-                        test cenas;
-                       addBehaviour( cenas = new test());
-                       receivedProposals = cenas.getReplys();
-                        roundStep = 0;
-
-                        break;
-                }
+            for(int i=0; i<bidderAgents.size();i++){
+                if(i==0){
+                    cenas.append(bidderAgents.get(i).getLocalName());
+                }else
+                    cenas.append(", "+bidderAgents.get(i).getLocalName());
             }
+             cenas.append(".");
+            System.out.println(cenas.toString());
+
+        }else{
+            //acabar aqui o cenas
+            lastRound = true;
         }
 
-        public class test extends Behaviour{
+    }
 
-            @Override
-            public void action() {
 
-            }
-
-            @Override
-            public boolean done() {
-                return false;
-            }
-        }
-
-*/
 }

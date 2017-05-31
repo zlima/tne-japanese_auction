@@ -36,16 +36,16 @@ public class main {
             arguments[1] = "0.1";
             arguments[2] = "0.1";
             AgentController ag = mainContainer.createNewAgent("Buyer1",
-                    "Bidder2Agent",
+                    "BidderAgent",
                     arguments);//arguments
             AgentController ag2 = mainContainer.createNewAgent("Buyer2",
-                    "Bidder2Agent",
+                    "BidderAgent",
                     arguments);//arguments
             AgentController ag3 = mainContainer.createNewAgent("Buyer3 ",
-                    "Bidder2Agent",
+                    "BidderAgent",
                     arguments);//arguments
             AgentController ag1 = mainContainer.createNewAgent("Auc1",
-                    "Auctioner2Agent",
+                    "AuctionerAgent",
                     new Object[] {});//arguments
             AgentController rma = mainContainer.createNewAgent("rma", "jade.tools.rma.rma" , new Object[] {});
 
