@@ -1,1 +1,1 @@
-http://mbp-de-jose.lan:52463/acc
+http://172.30.28.107:7778/acc

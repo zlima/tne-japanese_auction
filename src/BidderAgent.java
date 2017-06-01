@@ -8,7 +8,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.SSIteratedContractNetResponder;
 import jade.proto.SSResponderDispatcher;
-import sun.management.Agent;
+
 
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,10 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by joselima on 25/05/17.
  */
-
 public class BidderAgent extends jade.core.Agent {
-
-
     private String currentLoc;
     private String finalLoc;
     private int wallet;
@@ -35,14 +32,17 @@ public class BidderAgent extends jade.core.Agent {
 
         //if (args != null && args.length > 0) {
         if(args!=null){
-            setRandomWallet();
+            if(args[3].toString()=="null"){
+                setRandomWallet();
+            }
+            else{
+                wallet =  Integer.parseInt(args[3].toString());
+            }
 
-            //currentLoc = args[0].toString();
-            //finalLoc = args[1].toString();
+
+            currentLoc = args[0].toString();
+            finalLoc = args[1].toString();
             necessity = Double.parseDouble(args[2].toString());
-
-            currentLoc = "cena1";
-            finalLoc = "cenas2";
 
 
 
@@ -56,13 +56,11 @@ public class BidderAgent extends jade.core.Agent {
 
             try {
                 DFService.register(this,dfd);
-                System.out.println(getAID().getName() + " ready to buy some stuff. My wallet is $" + wallet);
+                System.out.println(getAID().getName() + " Ready to enter the auction. My wallet has $" + wallet);
             } catch (FIPAException e) {
                 e.printStackTrace();
             }
-
-
-
+            
             MessageTemplate template = MessageTemplate.and(
                     MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_ITERATED_CONTRACT_NET),
                     MessageTemplate.MatchPerformative(ACLMessage.CFP));
@@ -119,7 +117,7 @@ public class BidderAgent extends jade.core.Agent {
 
                                     try {
                                         refuse.setContentObject(new String("Quero Sair."));
-                                        System.out.println("Bidder: Quero Sair do Leilao: " + getLocalName()+".");
+                                        System.out.println("Bidder: Vou sair do Leilao: " + getLocalName()+".");
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -138,7 +136,7 @@ public class BidderAgent extends jade.core.Agent {
                 });
 
         } else {
-            System.out.println("rip nos args");
+            System.out.println("Bad arguments on agents setup");
             //terminate agent
             doDelete();
         }
@@ -149,25 +147,24 @@ private boolean acceptProposal(Proposal proposal){
 
     boolean response = false;
 
-        if(checkFlightDestination(proposal)){
-            if(maxValue >= proposal.getCurrentItemPrice() && maxValue <= wallet){
-                response = true;
-            }
-            else
-                response = false;
-
-        }else{
-            response = false;
+    if(checkFlightDestination(proposal)){
+        if(maxValue >= proposal.getCurrentItemPrice() && proposal.getCurrentItemPrice() <= wallet){
+            response = true;
         }
+        else
+            response = false;
 
-        return response;
+    }else{
+        response = false;
+    }
+
+    return response;
 }
 
 private Double calcMax(Proposal proposal){
 
-    double random = ThreadLocalRandom.current().nextDouble(0.1, 1.0);
-
-    return proposal.getAverageTicketPrice()*random + proposal.getAverageTicketPrice()*necessity;
+    double random = ThreadLocalRandom.current().nextDouble(0.5, 1.0);
+    return (proposal.getAverageTicketPrice()*random + proposal.getAverageTicketPrice()*necessity);
 
 }
 
@@ -215,8 +212,8 @@ private boolean checkFlightDestination(Proposal proposal){
     }
 
     private void setRandomWallet() {
-        Integer min = 200;
-        Integer max = 5000;
+        Integer min = 100;
+        Integer max = 2000;
 
          wallet = ThreadLocalRandom.current().nextInt(min, max);
 
